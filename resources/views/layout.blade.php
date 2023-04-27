@@ -128,7 +128,7 @@
 								<li class="dropdown"><a href="#">TIN TỨC<i class="fa fa-angle-down"></i></a>
                                   
                                 </li> 
-								<li><a href="404.html">GIỎ HÀNG</a></li>
+								<li><a href="{{URL::to('/gio-hang')}}">GIỎ HÀNG</a></li>
 								<li><a href="contact-us.html">LIÊN HỆ</a></li>
 							</ul>
 						</div>

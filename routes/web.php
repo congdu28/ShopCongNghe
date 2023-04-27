@@ -4,6 +4,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\BrandProduct;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CategoryProduct;
+use App\Http\Controllers\CouponController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProductController;
 use Illuminate\Support\Facades\Route;
@@ -77,3 +78,9 @@ Route::get('/gio-hang', [CartController::class, 'gio_hang']);
 Route::post('/update-cart-quantity', [CartController::class, 'update_cart_quantity']);
 Route::get('/delete-cart-product/{session_id}', [CartController::class, 'delete_cart_product']);
 Route::get('/delete-all-cart', [CartController::class, 'delete_all_cart']);
+// Coupon cart user
+Route::post('/check-coupon', [CartController::class, 'check_coupon']);
+//Coupon Admin
+Route::get('/list-coupon', [CouponController::class, 'list_coupon']);  // list coupon
+Route::get('/insert-coupon', [CouponController::class, 'insert_coupon']);  // chuyển đến trang thêm
+Route::post('/insert-coupon-code', [CouponController::class, 'insert_coupon_code']);  // hàm thêm code

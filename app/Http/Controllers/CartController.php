@@ -148,4 +148,9 @@ public function delete_all_cart(Request $request){
         return redirect()->back()->with('message','Đã xóa Giỏ hàng');
     }
 }
+
+public function check_coupon(Request $request){
+   $data = $request->all();
+   print_r($data);
+}
 }

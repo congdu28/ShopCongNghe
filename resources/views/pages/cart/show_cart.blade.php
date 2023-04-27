@@ -72,25 +72,33 @@
 						@endforeach
 						<tr>
 						   <td>
-					      	 	<input type="submit" value="Cập Nhật" name="update_qty" class="btn btn-default update">
+					      	 	<input type="submit" value="Cập Nhật" name="update_qty" class="btn btn-default update" style="width: 110px;">
                            </td>
 						   <td>
-						     	<a class="btn btn-default update" href="{{url('/delete-all-cart')}}">Xóa Hết Giỏ Hàng</a>
+						     	<a class="btn btn-default update" href="{{url('/delete-all-cart')}}" style="width: 110px;">Xóa Giỏ Hàng</a>
 						   </td>
+						  
+						 
 					    </tr>
 						<tr>
+						
 						   <td>
 								<ul>
 									<li style="color:black">Tổng sổ tiền sản phẩm: <span style="color:black; font-weight: bold;">{{number_format($total,0,',','.')}} đ</span></li>
-									<li style="color:black">Thuế (VAT): <span style="color:black;font-weight: bold;">5000 đ</span></li>
+									<li style="color:black">Thuế (VAT): <span style="color:black;font-weight: bold;">10%</span></li>
 									<li style="color:black">Phí vận chuyển: <span style="color:black; font-weight: bold;">Miễn phí</span></li>
-									<li style="color:black">Tổng số tiền thanh toán: <span style="color:black; font-weight: bold;">$61</span></li>
+									<li style="color:black; font-weight:bold;  font-size: larger ;" >Tổng phải thanh toán: <span style="color:black; font-weight: bolder;">$61</span></li>
 								</ul>	
 								
 						   </td>
-						   <td><a class="btn btn-default update" href="">Tính mã giảm giá</a>
-								<a class="btn btn-default update" href="">Thanh Toán Ngay</a></td>
-						</tr>
+						   <td>
+							 
+								<a class="btn btn-default update" href="" style="width: 110px;">Thanh Toán </a>
+						   </td>
+						    <td>					 
+							
+							</td>				
+						</tr>					
 					   @else
 					    <tr>
 								@php
@@ -99,8 +107,16 @@
 						</tr>
 						 @endif
 					</tbody>
-					
 					</form>
+					<tr>
+						<td>
+							<form action="{{url('/check-coupon')}}" method="post">
+								@csrf
+								<input type="text" class="form-control" placeholder="Nhập mã giảm giá" style="width: 200px; height: 35px; margin-left: 40px;">
+								<input type="submit" value="Áp dụng mã giảm giá" name="check_coupon" class="btn btn-default update" style="width: 200px; ">
+							</form>
+						</td>
+					</tr>
 				</table>
 			</div>
 		</div>
