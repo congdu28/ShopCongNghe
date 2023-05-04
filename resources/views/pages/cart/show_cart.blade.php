@@ -17,7 +17,7 @@
 			 </div>
 			@elseif(session()->has('error'))
 			 <div class="alert alert-danger text-center" style="font-weight: bold;">
-				{{session()->get('message')}}
+				{{session()->get('error')}}
 			 </div>
 			@endif
 			<form action="{{URL('/update-cart-quantity')}}" method="POST">
@@ -38,7 +38,7 @@
 					    @php
 								$total = 0;
 						@endphp
-						@foreach(Session::get('cart') as $cart)
+						@foreach(Session::get('cart') as $key => $cart)
 							@php
 								$subtotal = $cart['product_price']*$cart['product_qty'];
 								$total+=$subtotal;
@@ -76,20 +76,41 @@
                            </td>
 						   <td>
 						     	<a class="btn btn-default update" href="{{url('/delete-all-cart')}}" style="width: 110px;">Xóa Giỏ Hàng</a>
-						   </td>
-						  
-						 
+						   </td>				 
 					    </tr>
-						<tr>
-						
+						<tr>					
 						   <td>
 								<ul>
-									<li style="color:black">Tổng sổ tiền sản phẩm: <span style="color:black; font-weight: bold;">{{number_format($total,0,',','.')}} đ</span></li>
-									<li style="color:black">Thuế (VAT): <span style="color:black;font-weight: bold;">10%</span></li>
-									<li style="color:black">Phí vận chuyển: <span style="color:black; font-weight: bold;">Miễn phí</span></li>
-									<li style="color:black; font-weight:bold;  font-size: larger ;" >Tổng phải thanh toán: <span style="color:black; font-weight: bolder;">$61</span></li>
-								</ul>	
-								
+									<li style="color:black">Tổng số tiền : <span style="color:black; font-weight: bold;">{{number_format($total,0,',','.')}} đ</span></li>
+									@if(Session::get('coupon'))
+									<li style="color:black">
+									     @foreach(Session::get('coupon') as $key => $cou )
+										   @if($cou['coupon_condition']==1)
+												Mã giảm:  <span style="color:black;font-weight: bold;"> {{$cou['coupon_number']}} %  </span>
+												<p style="color:black;font-weight: bold;">
+												@php
+													$total_coupon = ($total*$cou['coupon_number'])/100;
+													echo '<p><li>Tổng giảm: <span style="color:black;font-weight: bold;">'.number_format($total_coupon,0,',','.').' đ </span></li></p>';
+												@endphp
+												</p>
+												<p> <li> Tổng sau giảm:  <span style="color:black;font-weight: bold;"> {{number_format($total-$total_coupon,0,',','.')}} đ </span></li></p>
+											@elseif($cou['coupon_condition']==2)
+												Mã giảm: <span style="color:black;font-weight: bold;"> {{number_format($cou['coupon_number'],0,',','.')}} đ </span>
+												<p style="color:black;font-weight: bold;">
+												@php
+													$total_coupon = $total - $cou['coupon_number'];
+												@endphp
+												</p>
+												<p>Tổng sau giảm:<span style="color:black;font-weight: bold;"> {{number_format($total_coupon,0,',','.')}} đ </span></p>
+											@endif
+										 @endforeach						 
+								    </li>
+									@endif
+
+									<!-- <li style="color:black">Thuế (VAT): <span style="color:black;font-weight: bold;">10%</span></li>
+									<li style="color:black">Phí vận chuyển: <span style="color:black; font-weight: bold;">Miễn phí</span></li> -->
+									<!-- <li style="color:black; font-weight:bold;  font-size: larger ;" >Tổng phải thanh toán: <span style="color:black; font-weight: bolder;">$61</span></li> -->
+								</ul>								
 						   </td>
 						   <td>
 							 
@@ -108,15 +129,21 @@
 						 @endif
 					</tbody>
 					</form>
+
+					@if(Session::get('cart'))
 					<tr>
 						<td>
-							<form action="{{url('/check-coupon')}}" method="post">
+							<form action="{{url('/check-coupon')}}" method="post">							
 								@csrf
-								<input type="text" class="form-control" placeholder="Nhập mã giảm giá" style="width: 200px; height: 35px; margin-left: 40px;">
-								<input type="submit" value="Áp dụng mã giảm giá" name="check_coupon" class="btn btn-default update" style="width: 200px; ">
+								<input type="text" class="form-control" name="coupon" placeholder="Nhập mã giảm giá" style="width: 200px; height: 35px; margin-left: 40px;">
+								<input type="submit" value="Áp dụng mã giảm giá" name="check_coupon" class="btn btn-default update check_coupon" style="width: 200px; ">	
+								@if(Session::get('coupon'))		
+						     	<a class="btn btn-default update" href="{{url('/unset-coupon')}}" style="width:200px;">Xóa Mã giảm giá</a>
+								@endif
 							</form>
 						</td>
 					</tr>
+					@endif
 				</table>
 			</div>
 		</div>

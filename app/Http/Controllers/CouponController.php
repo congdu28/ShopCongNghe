@@ -12,6 +12,20 @@ class CouponController extends Controller
     public function insert_coupon(){
         return view('admin.coupon.insert_coupon');
     }
+    public function unset_coupon(){
+		$coupon = Session::get('coupon');
+        if($coupon==true){
+          
+            Session::forget('coupon');
+            return redirect()->back()->with('message','Xóa mã giảm giá thành công');
+        }
+	}
+    public function delete_coupon($coupon_id){
+        $coupon = Coupon::find($coupon_id);  // so sánh coupon_id sài find
+        $coupon -> delete();
+        Session::put('message','Xóa mã giảm giá thành công');
+        return Redirect::to('list-coupon'); 
+    }
     public function list_coupon(){
         $coupon = Coupon::orderBy('coupon_id','desc')->get();
         return view('admin.coupon.list_coupon')->with(compact('coupon'));

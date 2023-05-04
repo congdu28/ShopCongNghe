@@ -10,7 +10,7 @@
 
                             $message = Session::get('message');
                             if($message){
-                                echo '<h5 style="color:#34c6eb; margin-top:5px" class="text-center">'.$message.'</h5>' ;
+                                echo '<h4 style="color:#34c6eb; margin-top:5px" class="text-center">'.$message.'</h4>' ;
                                 Session::put('message',null);
                             }
                             ?>

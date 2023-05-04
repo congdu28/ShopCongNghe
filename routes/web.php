@@ -80,7 +80,9 @@ Route::get('/delete-cart-product/{session_id}', [CartController::class, 'delete_
 Route::get('/delete-all-cart', [CartController::class, 'delete_all_cart']);
 // Coupon cart user
 Route::post('/check-coupon', [CartController::class, 'check_coupon']);
+Route::get('/unset-coupon', [CouponController::class, 'unset_coupon']);
 //Coupon Admin
 Route::get('/list-coupon', [CouponController::class, 'list_coupon']);  // list coupon
+Route::get('/delete-coupon/{coupon_id}', [CouponController::class, 'delete_coupon']);  // list coupon
 Route::get('/insert-coupon', [CouponController::class, 'insert_coupon']);  // chuyển đến trang thêm
 Route::post('/insert-coupon-code', [CouponController::class, 'insert_coupon_code']);  // hàm thêm code

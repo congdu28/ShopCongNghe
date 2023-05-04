@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Coupon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
@@ -9,7 +10,7 @@ use Illuminate\Support\Facades\Session;
 session_start();
 class CartController extends Controller
 {
-    
+
     public function gio_hang(Request $request){
         $meta_desc = "Giỏ hàng của bạn";
         $meta_keywords = "Giỏ hàng Ajax";
@@ -145,12 +146,87 @@ public function delete_all_cart(Request $request){
     $cart = Session::get('cart');
     if($cart==true){
         Session::forget('cart');  // xóa chỉ session cart
+        Session::forget('coupon');  // xóa chỉ session coupon
+
         return redirect()->back()->with('message','Đã xóa Giỏ hàng');
     }
 }
 
+// public function check_coupon(Request $request) {
+//     $data = $request->all();
+//     $coupon = Coupon::where('coupon_code', $data['coupon'])->first(); // trả về một bản ghi duy nhất.
+//     if($coupon) {
+//         $coupon_session = Session::get('coupon');
+//         if($coupon_session == null) {
+//             $cou = array(
+//                 'coupon_code' => $coupon->coupon_code,
+//                 'coupon_condition' => $coupon->coupon_condition,
+//                 'coupon_number' => $coupon->coupon_number,
+//             );
+//             Session::put('coupon', [$cou]);
+//             Session::save();
+//             return redirect()->back()->with('message', 'Thêm mã giảm giá Thành công!');
+//         } else {
+//             $coupon_already_in_cart = false;
+//             foreach($coupon_session as $cou) {
+//                 if($cou['coupon_code'] == $coupon->coupon_code) {
+//                     $coupon_already_in_cart = true;
+//                     break;
+//                 }
+//             }
+//             if($coupon_already_in_cart) {
+//                 //Thêm một vòng lặp để kiểm tra xem mã giảm giá đã được thêm vào giỏ hàng hay chưa. 
+//                 return redirect()->back()->with('message', 'Mã giảm giá đã được áp dụng!');
+//             } else {
+//                 $cou = array(
+//                     'coupon_code' => $coupon->coupon_code,
+//                     'coupon_condition' => $coupon->coupon_condition,
+//                     'coupon_number' => $coupon->coupon_number,
+//                 );
+//                 Session::push('coupon', $cou); //thêm một phần tử vào mảng session coupon.
+//                 Session::save();
+//                 return redirect()->back()->with('message', 'Thêm mã giảm giá Thành công!');
+//             }
+//         }
+//     } else {
+//         return redirect()->back()->with('error', 'Mã giảm giá sai hoặc đã được sử dụng!');
+//     }
+// }
+
 public function check_coupon(Request $request){
-   $data = $request->all();
-   print_r($data);
-}
+    $data = $request->all();
+    $coupon = Coupon::where('coupon_code',$data['coupon'])->first();
+    if($coupon){
+        $count_coupon = $coupon->count();
+        if($count_coupon>0){
+            $coupon_session = Session::get('coupon');
+            if($coupon_session==true){
+                $is_avaiable = 0;
+                if($is_avaiable==0){
+                    $cou[] = array(
+                        'coupon_code' => $coupon->coupon_code,
+                        'coupon_condition' => $coupon->coupon_condition,
+                        'coupon_number' => $coupon->coupon_number,
+
+                    );
+                    Session::put('coupon',$cou);
+                }
+            }else{
+                $cou[] = array(
+                        'coupon_code' => $coupon->coupon_code,
+                        'coupon_condition' => $coupon->coupon_condition,
+                        'coupon_number' => $coupon->coupon_number,
+
+                    );
+                Session::put('coupon',$cou);
+            }
+            Session::save();
+            return redirect()->back()->with('message','Thêm mã giảm giá thành công');
+        }
+
+    }else{
+        return redirect()->back()->with('error','Mã giảm giá không đúng hoặc đã được sử dụng');
+    }
+}   
+
 }
